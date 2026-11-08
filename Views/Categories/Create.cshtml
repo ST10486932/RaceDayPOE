@@ -1,0 +1,34 @@
+﻿@model RaceDay2.Models.Category
+
+@{
+    ViewData["Title"] = "Add Category";
+}
+
+<div class="container mt-4">
+    <h1 class="h3">Add a Category to: <span class="text-primary">@ViewBag.EventName</span></h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="All" class="text-danger fw-bold mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Category Name (e.g., 10km, Elite)</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Kind" class="form-label">Category Type</label>
+                    <select asp-for="Kind" class="form-select" asp-items="Html.GetEnumSelectList<RaceDay2.Models.CategoryKind>()"></select>
+                </div>
+
+                <!-- This hidden field ensures the category is linked to the right event -->
+                <input type="hidden" asp-for="EventId" />
+
+                <button type="submit" class="btn btn-primary">Add Category</button>
+                <a asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

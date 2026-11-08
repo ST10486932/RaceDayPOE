@@ -1,0 +1,29 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore main project
+      run: dotnet restore RaceDay2/RaceDay2.csproj
+
+    - name: Build main project
+      run: dotnet build RaceDay2/RaceDay2.csproj --no-restore
+
+    - name: Run Tests
+      run: dotnet test RaceDay2/Race_Day_2/Race_Day_2.csproj --verbosity normal

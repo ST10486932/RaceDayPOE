@@ -1,0 +1,59 @@
+﻿@model IEnumerable<RaceDay2.Models.Enrolment>
+
+@{
+    ViewData["Title"] = "Event Enrolments";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Enrolments for: <span class="text-primary">@ViewBag.EventName</span></h2>
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Participant</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Date Enrolled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var enrolment in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold align-middle">@(enrolment.Participant?.Email ?? enrolment.ParticipantId)</td>
+                            <td class="align-middle">@(enrolment.Category?.Name ?? "N/A")</td>
+                            <td class="align-middle">
+                                @if (enrolment.Status == "Approved" || enrolment.Status == "Confirmed")
+                                {
+                                    <span class="badge bg-success px-3 py-2">@enrolment.Status</span>
+                                }
+                                else if (enrolment.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark px-3 py-2">@enrolment.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger px-3 py-2">@enrolment.Status</span>
+                                }
+                            </td>
+                            <td class="align-middle">@enrolment.EnrolledOn.ToString("dd MMM yyyy HH:mm")</td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-5">
+                                <h5>No one has enrolled in this event yet.</h5>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="p-5 mb-4 bg-dark text-white rounded-3 shadow-lg" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+    <div class="container-fluid py-5">
+        <h1 class="display-4 fw-bold">Welcome to RaceDay</h1>
+        <p class="col-md-8 fs-4">The ultimate platform for South African runners, walkers, and cyclists. Find your next race, manage your events, and track your results.</p>
+        <a asp-controller="Events" asp-action="Index" class="btn btn-warning btn-lg fw-bold mt-3 text-dark">Browse Upcoming Events</a>
+    </div>
+</div>
+
+<!-- ONLY SHOW THESE CARDS IF THE USER IS NOT LOGGED IN -->
+@if (User?.Identity?.IsAuthenticated == false)
+{
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6 mb-4">
+            <div class="h-100 p-5 text-white bg-success rounded-3 shadow-sm">
+                <h2>For Participants</h2>
+                <p>Create your profile, enter events, and track your race history all in one place.</p>
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light">Register Now</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="h-100 p-5 bg-light border rounded-3 shadow-sm">
+                <h2>For Organisers</h2>
+                <p>Create events, manage categories, view enrolments, and publish race results effortlessly.</p>
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-secondary">Organiser Login</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <!-- SHOW THIS IF THEY ARE LOGGED IN -->
+    <div class="row text-center mt-5">
+        <div class="col-12">
+            <h3 class="text-muted">Ready for your next race?</h3>
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary btn-lg mt-3">Go to My Dashboard</a>
+        </div>
+    </div>
+}

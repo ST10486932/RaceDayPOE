@@ -1,0 +1,93 @@
+@model RaceDay2.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="container mt-4">
+    <h1 class="h3 mb-3">@Model.Name</h1>
+    <span class="badge bg-primary fs-6 mb-2">@Model.EventType</span>
+
+    @if (!string.IsNullOrEmpty(Model.BannerImageUrl))
+    {
+        <img src="@Model.BannerImageUrl" alt="Banner for @Model.Name" class="img-fluid rounded mb-4 shadow-sm" style="max-height: 400px; width: 100%; object-fit: cover;" />
+    }
+
+    <div class="row">
+        <div class="col-md-7">
+            <h4 class="h5">Event Information</h4>
+            <dl class="row">
+                <dt class="col-sm-3">Date</dt>
+                <dd class="col-sm-9">@Model.Date.ToString("dd MMM yyyy, HH:mm")</dd>
+
+                <dt class="col-sm-3">Location</dt>
+                <dd class="col-sm-9">@Model.Location</dd>
+
+                <dt class="col-sm-3">Distance</dt>
+                <dd class="col-sm-9">@Model.DistanceKm km</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+            </dl>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <h4 class="h5 mb-3">Categories</h4>
+                    @if (Model.Categories != null && Model.Categories.Any())
+                    {
+                        <ul class="list-group list-group-flush mb-4">
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0">
+                                    <span class="fw-bold">@cat.Name</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No categories have been defined for this event yet.</p>
+                    }
+
+                    @* --- PARTICIPANT ENROLMENT FORM --- *@
+                    @if (User.IsInRole("Participant"))
+                    {
+                        if (ViewBag.IsEnrolled == true)
+                        {
+                            <div class="alert alert-success mb-0">You are already enrolled in this event!</div>
+                        }
+                        else if (Model.Categories != null && Model.Categories.Any())
+                        {
+                            <hr />
+                            <h5 class="mb-3">Ready to race?</h5>
+                            <form asp-controller="Enrolments" asp-action="Create" method="post">
+                                <input type="hidden" name="eventId" value="@Model.Id" />
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Select Category</label>
+                                    <select name="categoryId" class="form-select" asp-items="ViewBag.Categories" required>
+                                        <option value="">-- Choose a Category --</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100 fw-bold">Enrol Now</button>
+                            </form>
+                        }
+                    }
+
+                    @* --- ORGANISER ACTIONS --- *@
+                    @if (ViewBag.IsOwner == true || User.IsInRole("Admin"))
+                    {
+                        <hr />
+                        <div class="d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary w-50">Edit Event</a>
+                            <a asp-controller="Categories" asp-action="Index" asp-route-eventId="@Model.Id" class="btn btn-outline-primary w-50">Manage Categories</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
