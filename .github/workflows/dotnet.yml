@@ -23,7 +23,7 @@ jobs:
       run: dotnet restore RaceDay2/RaceDay2.csproj
 
     - name: Build main project
-      run: dotnet build RaceDay2/RaceDay2.csproj --no-restore
+      run: dotnet build RaceDay2/RaceDay2.csproj --no-restore --configuration Release
 
     - name: Run Tests
-      run: dotnet test RaceDay2/Race_Day_2/Race_Day_2.csproj --verbosity normal
+      run: dotnet test RaceDay2/Race_Day_2/Race_Day_2.csproj --configuration Release --verbosity normal
