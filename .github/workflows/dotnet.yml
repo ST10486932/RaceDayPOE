@@ -19,8 +19,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    # By using '**/*.csproj', GitHub will find your main project and ignore the .sln file
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore **/*.csproj
 
     - name: Build main project
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build **/*.csproj --no-restore --configuration Release
